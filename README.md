@@ -56,6 +56,4 @@ Note: The workflow is ready to use, but users need to add their own credentials 
 - Divya Sree Atla
 - Rashmika Yenda
 
-## 📁 Workflow File
 
-AI Hackathon team matcher.json
