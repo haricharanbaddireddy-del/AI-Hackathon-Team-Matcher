@@ -57,3 +57,19 @@ Note: The workflow is ready to use, but users need to add their own credentials 
 - Rashmika Yenda
 
 
+## 🔄 n8n Workflow
+
+The automation workflow is available in this repository.
+
+📁 Workflow File:
+
+`AI Hackathon team matcher.json`
+
+Import this JSON file into n8n and connect your own Google Sheets, Gemini API, and Gmail credentials to run the automation.
+
+
+## 📸 Workflow Screenshot
+
+Below is the complete n8n automation workflow:
+
+![AI Hackathon Team Matcher Workflow](workflow.png)
