@@ -1,0 +1,422 @@
+{
+  "name": "AI Hackathon team matcher",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "108HEpVn71eQVYY8GURmmXFbXP7cm_tXZAjSDgsQyfZY",
+          "mode": "list",
+          "cachedResultName": "AI Hackathon Registrations",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/108HEpVn71eQVYY8GURmmXFbXP7cm_tXZAjSDgsQyfZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 200753931,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/108HEpVn71eQVYY8GURmmXFbXP7cm_tXZAjSDgsQyfZY/edit#gid=200753931"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        -336
+      ],
+      "id": "a56ca5e9-374d-40fb-bd30-442327ae82b7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "L1pnigPzLpxrMorD",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51e7bb3d-3a61-4082-bbc3-b428335e74db",
+              "name": "",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "9d5cdcfb-c237-4222-b711-8fcf6db7909c",
+              "name": "Full Name",
+              "value": "={{ $json['Full Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "413e3507-8cc6-41f0-ade3-6b9d98971839",
+              "name": "email",
+              "value": "={{ $json['Email Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "89f0f586-910c-43b3-ab62-e0f5347a1fba",
+              "name": "phone",
+              "value": "={{ $json['Phone Number'] }}",
+              "type": "number"
+            },
+            {
+              "id": "9c5dbfaa-1260-4bb8-a74f-4a7e62012ea2",
+              "name": "skills",
+              "value": "={{ $json['Technical Skills'] }}",
+              "type": "string"
+            },
+            {
+              "id": "9ebb0680-2fbb-43e8-b030-0b5cb3826600",
+              "name": "Add Domain",
+              "value": "={{ $json['Interested Domain'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a5ef8608-c722-485e-a0d5-6a8a3302cb7c",
+              "name": "Experience",
+              "value": "={{ $json['Experience Level'] }}",
+              "type": "string"
+            },
+            {
+              "id": "9bf2d12d-bc4a-4a98-86e8-1378f1b252dc",
+              "name": "preffered_role",
+              "value": "={{ $json['Preferred Role'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -336
+      ],
+      "id": "f2bc29f5-93c0-416c-a4f8-daf7f8ce29db",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create balanced hackathon teams using this student data:\n\n{{ JSON.stringify($json.data) }}\n\nYou are an expert hackathon team formation assistant.\n\nObjective:\nCreate the strongest possible hackathon teams while satisfying all constraints.\n\nConstraints:\n\nTeam size must be exactly 4 members.\nEvery student must be assigned exactly once.\nNo duplicate assignments.\nEach team should have a balanced mix of skills.\nDistribute experienced members evenly across teams.\nAvoid placing all beginners in one team.\nIf available, each team should contain:\nAt least one technical member (Programming/AI/Web/App Development)\nAt least one design or presentation-oriented member\nAvoid putting students with identical skill sets together when possible.\nMaximize diversity of skills within each team.\nIf the total number of students is not divisible by 4, create the minimum number of teams possible and distribute remaining members fairly.\n\nAssign one role per member:\n\nTeam Lead\nBackend Developer\nFrontend Developer\nAI/ML Engineer\nUI/UX Designer\nResearcher\nPresenter\nFull Stack Developer\n\n\n\n\n\nReturn ONLY raw JSON.\n\nDo not add explanations.\nDo not add markdown.\nDo not use code blocks.\nDo not use ```json.\n\nThe response must start with {\nThe response must end with }\n\nOutput format:\n\n{\n  \"teams\": [\n    {\n      \"team_name\": \"Team 1\",\n      \"members\": [\n        {\n          \"name\": \"\",\n          \"email\": \"\",\n          \"phone\": \"\",\n          \"role\": \"\"\n        }\n      ]\n    }\n  ]\n}",
+        "batching": {
+          "batchSize": 35
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        656,
+        -336
+      ],
+      "id": "33039ab1-3255-43c7-8d20-7de4f99f91b6",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        656,
+        -64
+      ],
+      "id": "5c74a8d3-7efb-425f-97e3-616b4c84e72c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Z7GTabVAdyyPTPN7",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        432,
+        -336
+      ],
+      "id": "0f5c4575-b4d1-41a7-9b1a-04acccf6e12e",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "let rawText = $input.first().json.text;\n\n// Strip markdown code fences if present\nrawText = rawText.replace(/^```json\\s*\\n?/i, '').replace(/\\n?```\\s*$/i, '');\n\nconst aiOutput = JSON.parse(rawText);\n\nlet students = [];\n\nfor (const team of aiOutput.teams) {\n  for (const member of team.members) {\n    students.push({\n      json: {\n        team_name: team.team_name,\n        name: member.name,\n        email: member.email,\n        phone: member.phone,\n        role: member.role\n      }\n    });\n  }\n}\n\nreturn students;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -336
+      ],
+      "id": "0ce3fe4b-0e40-4367-b124-52bb8e2c6c28",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "108HEpVn71eQVYY8GURmmXFbXP7cm_tXZAjSDgsQyfZY",
+          "mode": "list",
+          "cachedResultName": "AI Hackathon Registrations",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/108HEpVn71eQVYY8GURmmXFbXP7cm_tXZAjSDgsQyfZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1014573487,
+          "mode": "list",
+          "cachedResultName": "Teams",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/108HEpVn71eQVYY8GURmmXFbXP7cm_tXZAjSDgsQyfZY/edit#gid=1014573487"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "team_name": "={{ $json.team_name }}",
+            "name": "={{ $json.name }}",
+            "email": "={{ $json.email }}",
+            "phone": "={{ $json.phone }}",
+            "role": "={{ $json.role }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "team_name",
+              "displayName": "team_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1232,
+        -336
+      ],
+      "id": "eece843c-dcde-4eb3-99c1-d9232cdeab6c",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "L1pnigPzLpxrMorD",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Your AI Hackathon Team Details 🚀",
+        "message": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1680,
+        -336
+      ],
+      "id": "1c729613-55cc-4307-9d8d-f01ee4181ebf",
+      "name": "Send a message",
+      "webhookId": "47ef8fd0-4741-450d-9045-acca8f0eb432",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LKHWqf905luc4l7y",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const students = $input.all().map(item => item.json);\n\n// group students by team\nconst teams = {};\n\nfor (const student of students) {\n  if (!teams[student.team_name]) {\n    teams[student.team_name] = [];\n  }\n\n  teams[student.team_name].push(student);\n}\n\nlet emails = [];\n\nfor (const teamName in teams) {\n\n  const members = teams[teamName];\n\n  let teamDetails = \"\";\n\n  members.forEach((m, index) => {\n    teamDetails += `\n<b>${index + 1}. ${m.name}</b><br>\nRole: ${m.role}<br>\nEmail: ${m.email}<br>\nPhone: ${m.phone}<br><br>\n`;\n  });\n\n  for (const member of members) {\n\n    emails.push({\n      json: {\n        email: member.email,\n        name: member.name,\n        phone: member.phone,\n        role: member.role,\n        team_name: teamName,\n        message: `\nHello ${member.name},<br><br>\n\nYour AI Hackathon team has been created 🎉<br><br>\n\n<b>Team:</b> ${teamName}<br><br>\n\n<b>Your Team Members:</b><br><br>\n\n${teamDetails}\n\nAll the best 🚀\n`\n      }\n    });\n\n  }\n}\n\nreturn emails;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -336
+      ],
+      "id": "beac8de0-10d4-4519-97e8-c2eca4e41556",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -336
+      ],
+      "id": "30db83ea-3c21-431b-bb2d-9146df77f39c",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c2dc0710-d193-47cf-ba73-636de8de06cf",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "60569e86d75a9e547c51eee81f85966d19e2fd006ecb20e53ba89795a6d38e96"
+  },
+  "id": "fsVBSZhnBGqcopru",
+  "tags": []
+}
